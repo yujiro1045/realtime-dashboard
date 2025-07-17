@@ -13,13 +13,13 @@ function App() {
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar isOpen={isSidebarOpen} onClose={handleCloseSidebar} />
 
-      <main className="flex-1 md:ml-64">
+      <main className="flex-1 md:ml-64 flex flex-col">
         <Header />
 
         <div className="p-4 md:hidden">
           <button
             onClick={handleOpenSidebar}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 transition"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors"
           >
             <svg
               className="w-5 h-5"
@@ -36,12 +36,6 @@ function App() {
             </svg>
             Filtros
           </button>
-        </div>
-
-        <div className="p-4">
-          <h1 className="text-xl font-semibold">Dashboard principal</h1>
-          <p>tabla</p>
-          <p>gráficos</p>
         </div>
       </main>
     </div>
