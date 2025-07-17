@@ -1,19 +1,34 @@
 interface CardProps {
   title: string;
   value: string;
-  subtext: string;
+  percentage: string;
   icon?: React.ReactNode;
+  percentageColor?: "green" | "red" | "gray";
 }
 
-const Card = ({ title, value, subtext, icon }: CardProps) => {
+const Card = ({
+  title,
+  value,
+  percentage,
+  icon,
+  percentageColor = "gray",
+}: CardProps) => {
+  const colorMap = {
+    green: "text-green-500",
+    red: "text-red-500",
+    gray: "text-gray-500",
+  };
+
   return (
-    <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-4 w-full max-w-xs">
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-sm font-medium text-gray-500">{title}</span>
-        {icon}
+    <div className="bg-white border border-gray-200 rounded-lg p-4 flex justify-between items-center shadow-sm hover:shadow transition-shadow">
+      <div>
+        <h4 className="text-sm text-gray-500">{title}</h4>
+        <div className="text-2xl font-semibold text-gray-900">{value}</div>
+        <div className={`text-sm mt-1 ${colorMap[percentageColor]}`}>
+          {percentage}
+        </div>
       </div>
-      <h3 className="text-2xl font-semibold text-slate-800">{value}</h3>
-      <p className="text-sm text-green-500">{subtext}</p>
+      {icon && <div className="text-gray-400">{icon}</div>}
     </div>
   );
 };
