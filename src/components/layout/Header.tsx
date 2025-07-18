@@ -1,6 +1,15 @@
+import { useState } from "react";
 import Input from "../common/Input";
 
-const Header = () => {
+const Header = ({ onSearch }: { onSearch: (query: string) => void }) => {
+  const [query, setQuery] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setQuery(value);
+    onSearch(value);
+  };
+
   return (
     <header className="bg-white border-b border-gray-200 px-4 py-3 sm:px-6 sm:py-4 sticky top-0 z-30">
       <div className="flex items-center justify-between">
@@ -11,19 +20,14 @@ const Header = () => {
               CryptoMonitor
             </h1>
           </div>
-
-          <div className="hidden sm:flex items-center space-x-2 text-sm text-gray-500">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span>Live</span>
-            <span>•</span>
-            <span className="hidden md:inline">Updated 1 min ago</span>
-          </div>
         </div>
 
         <div className="flex items-center space-x-4">
           <Input
             placeholder="Search..."
             className="w-32 sm:w-48 md:w-64 text-sm"
+            value={query}
+            onChange={handleChange}
           />
         </div>
       </div>

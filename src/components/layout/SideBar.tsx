@@ -1,26 +1,36 @@
-import { useEffect } from "react";
-import Button from "../common/Button";
+import { useEffect, useState } from "react";
 import Select from "../common/Select";
+import axios from "axios";
+import type { ICrypto } from "../../interfaces/crypto.interface";
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  selectedCurrencyType: string;
+  onSelectCurrencyType: (type: string) => void;
 }
 
-const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
-  const countryOptions = [
-    { value: "all", label: "🌐 All Countries" },
-    { value: "us", label: "🇺🇸 US" },
-    { value: "uk", label: "🇬🇧 UK" },
-    { value: "ca", label: "🇨🇦 CA" },
-  ];
+const Sidebar = ({ isOpen, onClose, onSelectCurrencyType }: SidebarProps) => {
+  const [types, setTypes] = useState<string[]>([]);
 
-  const currencyOptions = [
-    { value: "all", label: "All Types" },
-    { value: "btc", label: "BTC" },
-    { value: "eth", label: "ETH" },
-    { value: "usdt", label: "USDT" },
-  ];
+  useEffect(() => {
+    const fetchTypes = async () => {
+      try {
+        const res = await axios.get("https://api.coinlore.net/api/tickers/");
+        const data: ICrypto[] = res.data.data;
+
+        const uniqueTypes = Array.from(
+          new Set(data.map((item) => item.symbol))
+        );
+
+        setTypes(uniqueTypes);
+      } catch (error) {
+        console.error("Error fetching currencies:", error);
+      }
+    };
+
+    fetchTypes();
+  }, []);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -29,6 +39,15 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
   }, [onClose]);
+
+  const currencyOptions = [
+    { value: "all", label: "All Types" },
+    ...types.map((type) => ({ value: type.toLowerCase(), label: type })),
+  ];
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onSelectCurrencyType(e.target.value);
+  };
 
   return (
     <>
@@ -51,41 +70,15 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         <div className="p-4">
           <div className="flex items-center justify-between mb-6 md:block">
             <h2 className="text-base font-semibold text-gray-900">Filters</h2>
-            <Button variant="ghost" onClick={onClose} className="p-2 md:hidden">
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </Button>
           </div>
 
           <div className="space-y-4 sm:space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Country
-              </label>
-              <Select options={countryOptions} />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Currency Type
               </label>
-              <Select options={currencyOptions} />
+              <Select options={currencyOptions} onChange={handleChange} />
             </div>
-          </div>
-
-          <div className="mt-6 sm:mt-8">
-            <Button className="w-full">Clear Filters</Button>
           </div>
         </div>
       </aside>
