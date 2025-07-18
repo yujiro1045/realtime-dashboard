@@ -17,7 +17,7 @@ const Header = ({ onSearch }: { onSearch: (query: string) => void }) => {
           <div className="flex items-center space-x-2">
             <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded"></div>
             <h1 className="text-lg sm:text-xl font-bold text-gray-900">
-              CryptoMonitor
+              Real-time Crypto Dashboard
             </h1>
           </div>
         </div>

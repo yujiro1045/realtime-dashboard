@@ -7,6 +7,7 @@ import { FaArrowUp, FaChartLine, FaGlobeAmericas } from "react-icons/fa";
 import CryptoTable from "./components/dashboard/CryptoTable";
 import { useCryptoStats } from "./hooks/useCryptoStats";
 import { useCurrencyFilter } from "./hooks/useCurrencyFilter";
+import CardSkeleton from "./components/common/CardSkeleton";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -59,7 +60,11 @@ function App() {
 
         <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {isLoading ? (
-            <p>Cargando tarjetas...</p>
+            <>
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+            </>
           ) : error || !data ? (
             <p>Error al cargar datos</p>
           ) : (
